@@ -1,14 +1,17 @@
-import base64
 import random
 from io import BytesIO
+from PIL import ImageColor
 from PIL import Image, ImageDraw
 
 
 class Icon:
-    def generate(index):
+    def generate(self, hex=None):
         im = Image.new('RGB', (420, 420), (240, 240, 240))
         draw = ImageDraw.Draw(im)
         color = (94, 112, 214)
+
+        if hex:
+            color = ImageColor.getcolor(f'#{hex}', "RGB")
 
         for i in range(5):
             for j in range(5):

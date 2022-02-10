@@ -21,11 +21,17 @@ methods = {"Available Methods": {
 def index():
     return methods
 
-
 @app.route("/square")
 @limits(calls=_CALLS, period=_PERIOD)
-def square_img():
+def square():
+    print("square")
     return send_file(ops.generate(), mimetype='image/png')
+
+@app.route("/square/<hex>")
+@limits(calls=_CALLS, period=_PERIOD)
+def square_rgb(hex):
+    print(hex)
+    return send_file(ops.generate(hex), mimetype='image/png')
 
 
 @app.errorhandler(404)
