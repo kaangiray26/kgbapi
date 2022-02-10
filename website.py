@@ -11,10 +11,22 @@ ops = Icon()
 _CALLS = 100
 _PERIOD = 60
 
+methods = {"Available Methods": {
+    "/square": "Generate random 5x5 bitmap"
+}}
+
+
+@app.route('/')
+@limits(calls=_CALLS, period=_PERIOD)
+def index():
+    return methods
+
+
 @app.route("/square")
 @limits(calls=_CALLS, period=_PERIOD)
 def square_img():
     return send_file(ops.generate(), mimetype='image/png')
+
 
 @app.errorhandler(404)
 @limits(calls=_CALLS, period=_PERIOD)
