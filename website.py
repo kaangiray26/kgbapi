@@ -1,11 +1,11 @@
 #!/usr/bin/python
 # -*- encoding:utf-8 -*-
 
-from flask import Flask, send_file
+from flask import Flask, send_file, render_template
 from ratelimit import limits
 from imops import Icon
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='static')
 ops = Icon()
 
 _CALLS = 100
@@ -19,13 +19,15 @@ methods = {"Available Methods": {
 @app.route('/')
 @limits(calls=_CALLS, period=_PERIOD)
 def index():
-    return methods
+    return render_template('index.html')
+
 
 @app.route("/square")
 @limits(calls=_CALLS, period=_PERIOD)
 def square():
     print("square")
     return send_file(ops.generate(), mimetype='image/png')
+
 
 @app.route("/square/<hex>")
 @limits(calls=_CALLS, period=_PERIOD)
