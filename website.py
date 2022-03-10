@@ -1,9 +1,10 @@
 #!/usr/bin/python
 # -*- encoding:utf-8 -*-
 
-from flask import Flask, send_file, render_template
-from ratelimit import limits
+import secrets
 from imops import Icon
+from ratelimit import limits
+from flask import Flask, send_file
 
 app = Flask(__name__, template_folder='static')
 ops = Icon()
@@ -11,15 +12,32 @@ ops = Icon()
 _CALLS = 100
 _PERIOD = 60
 
-methods = {"Available Methods": {
-    "/square": "Generate random 5x5 bitmap"
-}}
+methods = {"Available Methods": [
+    {
+        "/splash": "Return a random splash text"
+    },
+    {
+        "/square": "Generate random 5x5 bitmap"
+    },
+    {
+        "/square/<hex>": "Generate random 5x5 bitmap with color <hex>"
+    }
+]}
+
+with open("lines", "r") as f:
+    lines = f.read().splitlines()
 
 
 @app.route('/')
 @limits(calls=_CALLS, period=_PERIOD)
 def index():
-    return render_template('index.html')
+    return methods
+
+
+@app.route('/splash')
+@limits(calls=_CALLS, period=_PERIOD)
+def splash():
+    return {"success": True, "line": lines[secrets.randbelow(len(lines))]}
 
 
 @app.route("/square")
