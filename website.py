@@ -5,9 +5,11 @@ import secrets
 from imops import Icon
 from ratelimit import limits
 from flask import Flask, send_file
+from flask_cors import CORS
 
 app = Flask(__name__, template_folder='static')
 ops = Icon()
+CORS(app)
 
 _CALLS = 100
 _PERIOD = 60

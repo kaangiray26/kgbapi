@@ -1,5 +1,6 @@
 Pillow
 flask
+flask-cors
 requests
 gunicorn
 ratelimit
